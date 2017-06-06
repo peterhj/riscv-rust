@@ -219,6 +219,9 @@ supported_targets! {
     ("thumbv7m-none-eabi", thumbv7m_none_eabi),
     ("thumbv7em-none-eabi", thumbv7em_none_eabi),
     ("thumbv7em-none-eabihf", thumbv7em_none_eabihf),
+
+    ("riscv-unknown-linux-gnu", riscv_unknown_linux_gnu),
+    ("riscv64-unknown-linux-gnu", riscv64_unknown_linux_gnu),
 }
 
 /// Everything `rustc` knows about how to compile for a specific target.

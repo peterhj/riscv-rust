@@ -30,6 +30,8 @@ use cabi_sparc64;
 use cabi_nvptx;
 use cabi_nvptx64;
 use cabi_hexagon;
+use cabi_riscv;
+use cabi_riscv64;
 use machine::llalign_of_min;
 use type_::Type;
 use type_of;
@@ -898,6 +900,8 @@ impl<'a, 'tcx> FnType<'tcx> {
             "nvptx" => cabi_nvptx::compute_abi_info(ccx, self),
             "nvptx64" => cabi_nvptx64::compute_abi_info(ccx, self),
             "hexagon" => cabi_hexagon::compute_abi_info(ccx, self),
+            "riscv" => cabi_riscv::compute_abi_info(ccx, self),
+            "riscv64" => cabi_riscv64::compute_abi_info(ccx, self),
             a => ccx.sess().fatal(&format!("unrecognized arch \"{}\" in target specification", a))
         }
 

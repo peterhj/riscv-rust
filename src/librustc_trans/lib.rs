@@ -106,6 +106,8 @@ mod cabi_nvptx;
 mod cabi_nvptx64;
 mod cabi_powerpc;
 mod cabi_powerpc64;
+mod cabi_riscv;
+mod cabi_riscv64;
 mod cabi_s390x;
 mod cabi_sparc;
 mod cabi_sparc64;

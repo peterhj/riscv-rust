@@ -388,6 +388,12 @@ pub fn initialize_available_targets() {
                  LLVMInitializeHexagonTargetMC,
                  LLVMInitializeHexagonAsmPrinter,
                  LLVMInitializeHexagonAsmParser);
+    init_target!(llvm_component = "riscv",
+                 LLVMInitializeRISCVTargetInfo,
+                 LLVMInitializeRISCVTarget,
+                 LLVMInitializeRISCVTargetMC,
+                 LLVMInitializeRISCVAsmPrinter,
+                 LLVMInitializeRISCVAsmParser);
 }
 
 pub fn last_error() -> Option<String> {

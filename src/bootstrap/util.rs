@@ -44,8 +44,9 @@ pub fn copy(src: &Path, dst: &Path) {
     // let res = fs::hard_link(src, dst);
     let res = fs::copy(src, dst);
     if let Err(e) = res {
-        panic!("failed to copy `{}` to `{}`: {}", src.display(),
-               dst.display(), e)
+        println!("failed to copy `{}` to `{}`: {}", src.display(),
+               dst.display(), e);
+        return;
     }
     let metadata = t!(src.metadata());
     t!(fs::set_permissions(dst, metadata.permissions()));
