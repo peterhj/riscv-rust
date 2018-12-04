@@ -1566,6 +1566,7 @@ impl<'o, 'gcx: 'tcx, 'tcx> dyn AstConv<'gcx, 'tcx>+'o {
             }
             hir::TyKind::BareFn(ref bf) => {
                 require_c_abi_if_variadic(tcx, &bf.decl, bf.abi, ast_ty.span);
+                check_soundness_if_ptx_kernel_abi(tcx, &bf.decl, bf.abi, ast_ty.span);
                 tcx.mk_fn_ptr(self.ty_of_fn(bf.unsafety, bf.abi, &bf.decl))
             }
             hir::TyKind::TraitObject(ref bounds, ref lifetime) => {

@@ -151,6 +151,26 @@ fn require_c_abi_if_variadic(tcx: TyCtxt,
     }
 }
 
+fn check_soundness_if_ptx_kernel_abi(tcx: TyCtxt,
+                                     decl: &hir::FnDecl,
+                                     abi: Abi,
+                                     span: Span) {
+    if abi == Abi::PtxKernel {
+        for arg in decl.inputs.iter() {
+            // FIXME: How to best check that the input is `Copy + 'static`?
+            // Note that there is an `is_copy_raw`, not sure if that is what
+            // we actually want.
+            if !arg.ty.is_copy() {
+                let msg = "todo: ptx-kernel soundness".to_string();
+                let label = "todo: ptx-kernel soundness".to_string();
+                struct_span_warn!(tcx.sess, span, E00000, "{}", msg)
+                    .span_label(span, label)
+                    .emit();
+            }
+        }
+    }
+}
+
 fn require_same_types<'a, 'tcx>(tcx: TyCtxt<'a, 'tcx, 'tcx>,
                                 cause: &ObligationCause<'tcx>,
                                 expected: Ty<'tcx>,
