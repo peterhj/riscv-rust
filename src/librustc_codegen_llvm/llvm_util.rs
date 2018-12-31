@@ -60,7 +60,8 @@ unsafe fn configure_llvm(sess: &Session) {
         if sess.opts.debugging_opts.disable_instrumentation_preinliner {
             add("-disable-preinline");
         }
-        if llvm::LLVMRustIsRustLLVM() {
+        if llvm::LLVMRustIsRustLLVM() &&
+           !sess.target.target.options.no_merge_functions {
             add("-mergefunc-use-aliases");
         }
 

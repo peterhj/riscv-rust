@@ -690,7 +690,12 @@ pub struct TargetOptions {
 
     /// If set, have the linker export exactly these symbols, instead of using
     /// the usual logic to figure this out from the crate itself.
-    pub override_export_symbols: Option<Vec<String>>
+    pub override_export_symbols: Option<Vec<String>>,
+
+    /// Whether the MergeFunctions LLVM pass should be skipped for this target.
+    /// The MergeFunctions pass is generally useful but may be problematic for
+    /// some targets. Defaults to false.
+    pub no_merge_functions: bool
 }
 
 impl Default for TargetOptions {
@@ -773,6 +778,7 @@ impl Default for TargetOptions {
             requires_uwtable: false,
             simd_types_indirect: true,
             override_export_symbols: None,
+            no_merge_functions: false,
         }
     }
 }
@@ -1064,6 +1070,7 @@ impl Target {
         key!(requires_uwtable, bool);
         key!(simd_types_indirect, bool);
         key!(override_export_symbols, opt_list);
+        key!(no_merge_functions, bool);
 
         if let Some(array) = obj.find("abi-blacklist").and_then(Json::as_array) {
             for name in array.iter().filter_map(|abi| abi.as_string()) {
@@ -1275,6 +1282,7 @@ impl ToJson for Target {
         target_option_val!(requires_uwtable);
         target_option_val!(simd_types_indirect);
         target_option_val!(override_export_symbols);
+        target_option_val!(no_merge_functions);
 
         if default.abi_blacklist != self.options.abi_blacklist {
             d.insert("abi-blacklist".to_string(), self.options.abi_blacklist.iter()
