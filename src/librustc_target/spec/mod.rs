@@ -692,10 +692,11 @@ pub struct TargetOptions {
     /// the usual logic to figure this out from the crate itself.
     pub override_export_symbols: Option<Vec<String>>,
 
-    /// Whether the MergeFunctions LLVM pass should run for this target.
+    /// Determines how or whether the MergeFunctions LLVM pass should run for
+    /// this target. Either "disabled", "trampolines", or "aliases".
     /// The MergeFunctions pass is generally useful, but some targets may need
-    /// to opt out. Defaults to `true`.
-    pub merge_functions: bool
+    /// to opt out. The default is "aliases".
+    pub merge_functions: String
 }
 
 impl Default for TargetOptions {
@@ -778,7 +779,7 @@ impl Default for TargetOptions {
             requires_uwtable: false,
             simd_types_indirect: true,
             override_export_symbols: None,
-            merge_functions: true,
+            merge_functions: "aliases".to_string(),
         }
     }
 }
@@ -1070,7 +1071,7 @@ impl Target {
         key!(requires_uwtable, bool);
         key!(simd_types_indirect, bool);
         key!(override_export_symbols, opt_list);
-        key!(merge_functions, bool);
+        key!(merge_functions);
 
         if let Some(array) = obj.find("abi-blacklist").and_then(Json::as_array) {
             for name in array.iter().filter_map(|abi| abi.as_string()) {

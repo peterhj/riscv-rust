@@ -161,9 +161,15 @@ impl ModuleConfig {
         // Therefore, allow targets to opt out of the MergeFunctions pass,
         // but otherwise keep the pass enabled (at O2 and O3) since it can be
         // useful for reducing code size.
-        self.merge_functions = (sess.opts.optimize == config::OptLevel::Default ||
-                                sess.opts.optimize == config::OptLevel::Aggressive) &&
-                               sess.target.target.options.merge_functions;
+        self.merge_functions = match sess.opts.debugging_opts.merge_functions.as_ref()
+                                     .unwrap_or(&sess.target.target.options.merge_functions)
+                                     .as_str() {
+            "disabled" => false,
+            "trampolines" |
+            "aliases" => sess.opts.optimize == config::OptLevel::Default ||
+                         sess.opts.optimize == config::OptLevel::Aggressive,
+            k => panic!("unknown merge-functions kind: {}", k),
+        };
     }
 
     pub fn bitcode_needed(&self) -> bool {

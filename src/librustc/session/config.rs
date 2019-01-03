@@ -1380,6 +1380,9 @@ options! {DebuggingOptions, DebuggingSetter, basic_debugging_options,
           "whether to use the PLT when calling into shared libraries;
           only has effect for PIC code on systems with ELF binaries
           (default: PLT is disabled if full relro is enabled)"),
+    merge_functions: Option<String> = (None, parse_opt_string, [TRACKED],
+        "control the operation of the MergeFunctions LLVM pass, taking
+         the same values as the target option of the same name"),
 }
 
 pub fn default_lib_output() -> CrateType {

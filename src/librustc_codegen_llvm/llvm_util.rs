@@ -60,9 +60,17 @@ unsafe fn configure_llvm(sess: &Session) {
         if sess.opts.debugging_opts.disable_instrumentation_preinliner {
             add("-disable-preinline");
         }
-        if llvm::LLVMRustIsRustLLVM() &&
-           sess.target.target.options.merge_functions {
-            add("-mergefunc-use-aliases");
+        if llvm::LLVMRustIsRustLLVM() {
+            match sess.opts.debugging_opts.merge_functions.as_ref()
+                  .unwrap_or(&sess.target.target.options.merge_functions)
+                  .as_str() {
+                "disabled" |
+                "trampolines" => {}
+                "aliases" => {
+                    add("-mergefunc-use-aliases");
+                }
+                k => panic!("unknown merge-functions kind: {}", k),
+            }
         }
 
         // HACK(eddyb) LLVM inserts `llvm.assume` calls to preserve align attributes
